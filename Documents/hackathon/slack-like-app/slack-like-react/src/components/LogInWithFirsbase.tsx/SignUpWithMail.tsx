@@ -1,23 +1,29 @@
 import React, {useState} from "react"
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { useHistory } from 'react-router-dom';
 
 
 
-interface SignUpProps {
-  setCurrentPage: React.Dispatch<React.SetStateAction<string>>;
-}
 
-const SignUp: React.FC<SignUpProps> =({ setCurrentPage }) => {
+
+const SignUpWithMail: React.FC =() => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const history = useHistory();
+  const auth = getAuth();
+
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) =>{
     e.preventDefault();
     console.log(email, password);
+
+
     createUserWithEmailAndPassword(getAuth(), email, password)
       .then((userCredential)=>{
         const user = userCredential.user;
-        setCurrentPage("Contents");
+        const uid = user.uid;
+
+        history.push(`/IsThereAccount/${uid}`);
       })
       .catch((error)=>{
         const errorCode = error.code;
@@ -66,4 +72,4 @@ const SignUp: React.FC<SignUpProps> =({ setCurrentPage }) => {
   );
 };
 
-export default SignUp
+export default SignUpWithMail;

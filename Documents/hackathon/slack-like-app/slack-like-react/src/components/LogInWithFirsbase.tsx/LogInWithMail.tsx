@@ -1,20 +1,23 @@
 import { useState } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useHistory } from 'react-router-dom';
 
-interface SignInProps {
-  setCurrentPage: React.Dispatch<React.SetStateAction<string>>;
-}
-
-const SignIn: React.FC<SignInProps> = ({ setCurrentPage }) => {
+const SignIn: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const auth = getAuth();
+  const history = useHistory();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+
     signInWithEmailAndPassword(getAuth(), email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        setCurrentPage("Contents");
+        const uid = user.uid;
+
+        history.push(`/IsThereAccount/${uid}`);
       })
       .catch((error) => {
         ResetEmail();

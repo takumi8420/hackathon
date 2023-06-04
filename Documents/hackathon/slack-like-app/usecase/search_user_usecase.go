@@ -1,10 +1,10 @@
 package usecase
 
 import (
-	"new_db/dao"
-	"new_db/model"
+	"slack-like-app/dao/user_dao"
+	"slack-like-app/model"
 )
 
-func GetUserByName(name string) ([]model.UserResForHTTPGet, error) {
-	return dao.FindUsersByName(name)
+func GetUserByName(uid string) (*model.UserResForHTTPGet, error) {
+	return user_dao.FindUsersByName(uid)
 }

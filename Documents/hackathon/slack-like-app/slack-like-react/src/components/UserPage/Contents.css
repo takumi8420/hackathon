@@ -1,0 +1,43 @@
+.slack-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header{
+  border-bottom: 1px solid #2c303b;
+  padding-left: 20px;
+}
+
+.top-bar {
+  height: 60px;
+  padding-left: 20px;
+  background-color: #2c303b;
+}
+
+.body-contents {
+  display: flex;
+  flex: 1;
+}
+
+.sidebar1 {
+  width: 120px;
+  background-color: darkblue;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-contents{
+  border-bottom: 1px solid #2c303b;
+  padding-left: 20px;
+}
+
+.user-list {
+  flex: 0 0 150px;
+  background-color: #f8f8f8;
+  margin-top: auto;
+}

@@ -1,22 +1,20 @@
 
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import LoginWithGoogleForm from "./components/LogInWithFirsbase.tsx/LoginWithGoogleForm";
-import Contents  from "./components/UserPage/Contents";
+import LoginWithGoogleForm from "./LogInWithFirsbase.tsx/LoginWithGoogleForm";
+import Contents  from "./UserPage/Contents";
 import { onAuthStateChanged } from "firebase/auth";
-import { fireAuth } from "./firebase";
-import SignUp from "./components/LogInWithFirsbase.tsx/SignUpWithMail"
-import DefaultPage from "./DefaultPage"
-import SignIn from './components/LogInWithFirsbase.tsx/LogInWithMail';
+import { fireAuth } from "../firebase";
+import SignUp from "./LogInWithFirsbase.tsx/SignUpWithMail"
+import SignIn from './LogInWithFirsbase.tsx/LogInWithMail';
 import logo from './logo.svg';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 
 
+const DefaultPage: React.FC = () => {
 
-
-function App() {
   // stateとしてログイン状態を管理する。ログインしていないときはnullになる。
   const [loginUser, setLoginUser] = useState(fireAuth.currentUser);
 
@@ -36,7 +34,7 @@ function App() {
 
   let pageContent;
 
- 
+
 
 
 
@@ -72,6 +70,6 @@ function App() {
 }
 
 
-export default App;
+  export default DefaultPage;
 
 
