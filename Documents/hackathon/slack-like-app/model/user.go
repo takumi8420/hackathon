@@ -50,6 +50,7 @@ type MessagesResForGet struct {
 	UserId    string    `json:"user_id"`
 	Contents  string    `json:"contents"`
 	CreatedAt time.Time `json:"created_at"`
+	IsEdited  int       `json:"is_edited"`
 }
 
 type MessagesReqForPost struct {
@@ -58,7 +59,6 @@ type MessagesReqForPost struct {
 	UserId    string `json:"user_id"`
 	Contents  string `json:"contents"`
 	// CreatedAt time.Time `json:"created_at"`
-	UserName string `json:"user_name"`
 }
 
 type MessagesResForPost struct {
@@ -68,6 +68,7 @@ type MessagesResForPost struct {
 	Contents  string    `json:"contents"`
 	CreatedAt time.Time `json:"created_at"`
 	UserName  string    `json:"user_name"`
+	IsEdited  int       `json:"is_edited"`
 }
 
 type ChannelReqForPost struct {

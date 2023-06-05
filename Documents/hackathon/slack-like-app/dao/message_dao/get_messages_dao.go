@@ -43,7 +43,7 @@ func CloseDB() error {
 
 func FindMessagesById(userId string) ([]model.MessagesResForGet, error) {
 
-	rows, err := db.Query("SELECT user.user_name, messages.message_id, messages.channel_id, messages.user_id, messages.contents, messages.created_at FROM messages LEFT JOIN user ON messages.user_id = user.user_id WHERE messages.user_id = ?", userId)
+	rows, err := db.Query("SELECT user.user_name, message.message_id, message.channel_id, message.user_id, message.contents, message.created_at, message.is_edited FROM messages LEFT JOIN user ON message.user_id = user.user_id WHERE message.user_id = ?", userId)
 	if err != nil {
 		return nil, err
 	}
@@ -58,7 +58,7 @@ func FindMessagesById(userId string) ([]model.MessagesResForGet, error) {
 	for rows.Next() {
 		i += 1
 		var u model.MessagesResForGet
-		if err := rows.Scan(&u.UserName, &u.MessageId, &u.ChannelId, &u.UserId, &u.Contents, &u.CreatedAt); err != nil {
+		if err := rows.Scan(&u.UserName, &u.MessageId, &u.ChannelId, &u.UserId, &u.Contents, &u.CreatedAt, &u.IsEdited); err != nil {
 			log.Printf("fail: rows.Scan, %v\n", err)
 
 			if err := rows.Close(); err != nil { // 500を返して終了するが、その前にrowsのClose処理が必要
@@ -75,7 +75,7 @@ func FindMessagesById(userId string) ([]model.MessagesResForGet, error) {
 
 func FindMessagesByChannel(channelId string) (*[]model.MessagesResForGet, error) {
 
-	rows, err := db.Query("SELECT user.user_name, messages.message_id, messages.channel_id, messages.user_id, messages.contents, messages.created_at FROM messages LEFT JOIN user ON messages.user_id = user.user_id WHERE messages.channel_id = ?", channelId)
+	rows, err := db.Query("SELECT user.user_name, message.message_id, message.channel_id, message.user_id, message.content, message.created_at, message.is_edited FROM message LEFT JOIN user ON message.user_id = user.user_id WHERE message.channel_id = ?", channelId)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +90,7 @@ func FindMessagesByChannel(channelId string) (*[]model.MessagesResForGet, error)
 	for rows.Next() {
 		i += 1
 		var u model.MessagesResForGet
-		if err := rows.Scan(&u.UserName, &u.MessageId, &u.ChannelId, &u.UserId, &u.Contents, &u.CreatedAt); err != nil {
+		if err := rows.Scan(&u.UserName, &u.MessageId, &u.ChannelId, &u.UserId, &u.Contents, &u.CreatedAt, &u.IsEdited); err != nil {
 			log.Printf("fail: rows.Scan, %v\n", err)
 
 			//if err := rows.Close(); err != nil { // 500を返して終了するが、その前にrowsのClose処理が必要
@@ -114,7 +114,7 @@ func FindMessagesByChannel(channelId string) (*[]model.MessagesResForGet, error)
 	return &messages, nil
 }
 
-func SendMessages(messasge_data model.MessagesReqForPost) (model.MessagesResForPost, error) {
+func SendMessages(messageData model.MessagesReqForPost) (model.MessagesResForPost, error) {
 	t := time.Now()
 	entropy := ulid.Monotonic(rand.New(rand.NewSource(t.UnixNano())), 0)
 	id := ulid.MustNew(ulid.Timestamp(t), entropy).String()
@@ -127,19 +127,23 @@ func SendMessages(messasge_data model.MessagesReqForPost) (model.MessagesResForP
 	}
 	defer tx.Rollback()
 
-	log.Println("ここからinsert")
+	initialBool := 0
 
-	_, err = tx.Exec("INSERT INTO messages (message_id, channel_id, user_id, contents, created_at) VALUES (?, ?, ?, ?, ?)", id, messasge_data.ChannelId, messasge_data.UserId, messasge_data.Contents, t)
+	log.Println("ここからinsert")
+	log.Println("insertの内容：", id, messageData.ChannelId, messageData.UserId, messageData.Contents, t.Format("2006-01-02 15:04:05"), initialBool)
+
+	_, err = tx.Exec("INSERT INTO message (message_id, channel_id, user_id, content, created_at, is_edited) VALUES (?, ?, ?, ?, ?, ?)", id, messageData.ChannelId, messageData.UserId, messageData.Contents, t.Format("2006-01-02 15:04:05"), initialBool)
 	if err != nil {
+		log.Println(err)
 		return model.MessagesResForPost{}, err
 	}
 	log.Println("ok user table")
 
-	log.Println(id, messasge_data.ChannelId, messasge_data.UserId, messasge_data.Contents, t)
+	log.Println(id, messageData.ChannelId, messageData.UserId, messageData.Contents, t)
 
 	if err := tx.Commit(); err != nil {
 		return model.MessagesResForPost{}, err
 	}
 
-	return model.MessagesResForPost{MessageId: id, ChannelId: messasge_data.ChannelId, UserId: messasge_data.UserId, Contents: messasge_data.Contents, CreatedAt: t}, nil
+	return model.MessagesResForPost{MessageId: id, ChannelId: messageData.ChannelId, UserId: messageData.UserId, Contents: messageData.Contents, CreatedAt: t}, nil
 }

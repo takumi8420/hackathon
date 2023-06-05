@@ -121,7 +121,7 @@ func RegisterUserAndChannel(req model.UserAndChannelReqForPost, uid string) (mod
 		return model.UserAndChannelResForPost{}, err
 	}
 
-	return model.UserAndChannelResForPost{id, req.ChannelId, req.WorkspaceId, uid}, nil
+	return model.UserAndChannelResForPost{ChannelMemberId: id, ChannelId: req.ChannelId, WorkspaceId: req.WorkspaceId, UserId: uid}, nil
 }
 
 func RegisterUserAndWorkspace(req model.UserAndWorkplaceReqForPost, uid string) (model.UserAndWorkspaceResForPost, error) {
@@ -149,5 +149,5 @@ func RegisterUserAndWorkspace(req model.UserAndWorkplaceReqForPost, uid string) 
 		return model.UserAndWorkspaceResForPost{}, err
 	}
 
-	return model.UserAndWorkspaceResForPost{id, req.WorkspaceId, uid, req.Name}, nil
+	return model.UserAndWorkspaceResForPost{WorkspaceMemberId: id, WorkspaceId: req.WorkspaceId, UserId: uid, WorkspaceUserName: req.Name}, nil
 }

@@ -8,7 +8,9 @@ import { useState, useEffect } from "react";
 const Contents: React.FC = () => {
   const [messageDatas, setMessageDatas] = useState<messageData[]>([]);
   const [channelData, setChannelData] = useState<channelData[]>([]);
+  const [currentChannelData, setCurrentChannelData] = useState<channelData>();
   const [workspaceData, setWorkspaceData] = useState<workspaceData[]>([]);
+  const [currentWorkspaceData, setCurrentWorkspaceData] = useState<workspaceData>();
   const url = window.location.href;
   const uid = url.substring(url.lastIndexOf("/") + 1);
   // console.log(uid);
@@ -21,6 +23,7 @@ const Contents: React.FC = () => {
     user_id:    string;   
     contents:  string;    
     created_at: Date;
+    is_edited: boolean;
   }
 
   type workspaceData ={
@@ -30,12 +33,15 @@ const Contents: React.FC = () => {
   }
 
   type channelData ={
-    channelName: string; 
+    channel_id: string;
+    channel_name: string; 
   }
+
+  
 
 
   const fetchMessageData = async () => {
-    const getResponse = await fetch(`https://hackthon1-rzmhhbabrq-uc.a.run.app/get_messages_with_channel_id/01H176RMW0FKAPB8R6509H9BJX`, {
+    const getResponse = await fetch(`https://hackthon1-rzmhhbabrq-uc.a.run.app/get_messages_with_channel_id/${currentChannelData?.channel_id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -65,7 +71,8 @@ const Contents: React.FC = () => {
   };
 
   const fetchChannelData = async () => {
-    const getResponse = await fetch(`https://hackthon1-rzmhhbabrq-uc.a.run.app/get_channel_with_workspace_id/${uid}`, {
+    console.log("currentworkspaceは：", currentWorkspaceData?.workspace_id);
+    const getResponse = await fetch(`https://hackthon1-rzmhhbabrq-uc.a.run.app/get_channel_with_workspace_id/${currentWorkspaceData?.workspace_id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -76,12 +83,32 @@ const Contents: React.FC = () => {
     setChannelData(data);
   };
 
-  useEffect(() => {
-    fetchWorkspaceData();
-    // fetchChannelData();
-    fetchMessageData();
-  }, []);
+  // useEffect(() => {
+  //   fetchWorkspaceData();
+  //   setCurrentWorkspaceData(workspaceData[0]);
+  //   console.log(currentWorkspaceData)
+  //   fetchChannelData();
+  //   setCurrentChannelData(channelData[0])
+  //   console.log(currentChannelData)
+  //   fetchMessageData();
+  // }, []);
+  
+  const fetchData = async () => {
+    await fetchWorkspaceData();
+    setCurrentWorkspaceData(workspaceData[0]);
+    console.log("currentworkspaceはこれです：",currentWorkspaceData);
 
+    await fetchChannelData();
+    setCurrentChannelData(channelData[0]);
+    console.log(currentChannelData);
+
+    await fetchMessageData();
+  };
+
+  useEffect(() => {
+
+    fetchData();
+  }, []);
 
 
   
