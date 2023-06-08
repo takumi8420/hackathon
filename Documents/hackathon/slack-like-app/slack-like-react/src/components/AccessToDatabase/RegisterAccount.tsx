@@ -3,10 +3,10 @@ import RegisterForm from "./RegisterForm"
 import { useHistory } from 'react-router-dom';
 
 
-interface User {
-  id: string;
-  name: string;
+type User = {
   age: number;
+  user_id: string;
+  user_name: string;
   // 他のユーザープロパティを追加する場合はここに追記
 }
 
@@ -40,11 +40,12 @@ function RegisterAccount(){
           // // 取得したデータを使って処理を行う
             const data: User = await getResponse.json();
             // const filteredData = [data].filter((user) => user.user_id === uid);
+            console.log(data)
             setUserData(data);
-            console.log("data is:", data.id);
+            console.log("data is:", data.user_id);
             // 取得したデータを使って処理を行う
             if (data && Object.keys(data).length > 0) {
-              history.push(`/UserPage/${data.id}`);
+              history.push(`/UserPage/${data.user_id}`);
           } else {
             history.push(`/RegisterAccount/${uid}`);
               console.log(data);
@@ -94,14 +95,18 @@ function RegisterAccount(){
   return (
     <div style={{ display: "flex", flexDirection:  "column"}}>
       <div className="App">
-        <header className="App-header">
+        {/* <header className="App-header" style={{ height: "auto" }}>
           <div>
             <h1>User Register</h1>
           </div>
-        </header>
-        <RegisterForm
-        onSubmit={onSubmit} 
-        />
+        </header> */}
+        <div className="main">
+          <h1>登録してね</h1>
+          <RegisterForm 
+            onSubmit={onSubmit} 
+          />
+        </div>
+        
       </div>
       </div>
   );

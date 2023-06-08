@@ -64,6 +64,7 @@ func CreateUser(user model.UserReqForHTTPPost, uid string) (model.UserResForHTTP
 	id := ulid.MustNew(ulid.Timestamp(t), entropy).String()
 	log.Println("uid:", uid)
 	log.Println("id:", id)
+	log.Println(user.Name, user.Age)
 
 	tx, err := db.Begin()
 	if err != nil {
@@ -71,7 +72,7 @@ func CreateUser(user model.UserReqForHTTPPost, uid string) (model.UserResForHTTP
 	}
 	defer tx.Rollback()
 
-	_, err = tx.Exec("INSERT INTO user (user_id, user_name, age, registered_at) VALUES (?, ?, ?, ?)", id, user.Name, user.Age, t)
+	_, err = tx.Exec("INSERT INTO user (user_id, user_name, age, registered_at, photo_url) VALUES (?, ?, ?, ?, ?)", id, user.Name, user.Age, t, "")
 	if err != nil {
 		return model.UserResForHTTPPost{}, err
 	}

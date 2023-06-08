@@ -10,6 +10,7 @@ import { Route, BrowserRouter } from 'react-router-dom';
 import IsThereAccount from './components/AccessToDatabase/IsThereAccount';
 import RegisterAccount from './components/AccessToDatabase/RegisterAccount';
 import Contents from './components/UserPage/Contents';
+import Rename from './components/RenamePage';
 
 
 
@@ -23,10 +24,10 @@ ReactDOM.render(
         <Route exact path="/LoginWithGoogle" component={LoginWithGoogleForm} />
         <Route exact path="/SignUpWithMail" component={SignUpWithMail} />
         <Route exact path="/LoginWithMail" component={LogInWithMail} />
-        {/* <Route exact path="/UserPage" component={UserPage} /> */}
         <Route path="/IsThereAccount" component={IsThereAccount} />
         <Route path="/RegisterAccount" component={RegisterAccount} />
         <Route path="/UserPage" component={Contents} />
+        <Route path="/EditUserName" component={Rename} />
 
         
 

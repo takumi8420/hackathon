@@ -2,6 +2,7 @@ import { strict } from "assert";
 import React, { useState, useEffect } from "react";
 import { useHistory } from 'react-router-dom';
 
+
 interface User {
   user_id: string;
   name: string;
@@ -31,14 +32,16 @@ const IsThereAccount: React.FC = () => {
             "Access-Control-Request-Headers": "Content-Type"
           },
         });
-
+        
         if (getResponse.ok) {
           // // 取得したデータを使って処理を行う
             const data: User = await getResponse.json();
             // const filteredData = [data].filter((user) => user.user_id === uid);
+
+            if(data.user_id!=""){
             setUserData(data);
             // 取得したデータを使って処理を行う
-            if (data && Object.keys(data).length > 0) {
+            // if (data && Object.keys(data).length > 0) {
               history.push(`/UserPage/${data.user_id}`);
               console.log("data:",data.user_id);
           } else {
@@ -64,7 +67,7 @@ const IsThereAccount: React.FC = () => {
 
   return (
     <div>
-          <p>UID: {userData?.user_id}</p>
+          {/* <p>UID: {userData?.user_id}</p> */}
     </div>
 
 
