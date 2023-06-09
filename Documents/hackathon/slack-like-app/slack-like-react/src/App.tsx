@@ -1,13 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import LoginWithGoogleForm from "./components/LogInWithFirsbase.tsx/LoginWithGoogleForm";
-import Contents  from "./components/UserPage/Contents";
+import LoginWithGoogleForm from "./Pages/LoginPage/LoginWithGoogleForm";
+import Contents  from "./Pages/UserPage/MainPage/ChatPage";
 import { onAuthStateChanged } from "firebase/auth";
 import { fireAuth } from "./firebase";
-import SignUp from "./components/LogInWithFirsbase.tsx/SignUpWithMail"
-import DefaultPage from "./DefaultPage"
-import SignIn from './components/LogInWithFirsbase.tsx/LogInWithMail';
+import SignUp from "./Pages/LoginPage/SignUpWithMail"
+import SignIn from './Pages/LoginPage/LogInWithMail';
 import logo from './logo.svg';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -34,33 +33,27 @@ function App() {
 
   // const [currentPage, setCurrentPage] = useState("defaultPage");
 
-  let pageContent;
-
- 
-
-
+  // let pageContent;
 
   return (
     <div>
       <div className="App">
-      <header className="App-header">
+        <header className="App-header">
       <h1>
-        SLACK-LIKE-APP
+        SLUCK
       </h1>
-        <img src={logo} className="App-logo" alt="logo" />
+      <img src={logo} className="App-logo" alt="logo" />
 
-      <div>
-        <Link to="/LoginWithGoogle">
-          <button>Googleアカウントでサインイン</button>
-        </Link>
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <LoginWithGoogleForm/>
 
 
         <Link to="/LogInWithMail">
-          <button>メールアドレスでログイン</button>
+          <button style={{height: "30px", width: "200px"}}>メールアドレスでログイン</button>
         </Link>
 
         <Link to="/SignUpWithMail">
-          <button>メールアドレスで登録する</button>
+          <button style={{height: "30px", width: "200px"}}>メールアドレスで登録する</button>
         </Link>
       </div>
       

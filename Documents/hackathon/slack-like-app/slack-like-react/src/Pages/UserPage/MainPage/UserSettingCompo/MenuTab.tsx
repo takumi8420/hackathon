@@ -13,10 +13,10 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 
 type Props = {
-  setShowModalToCreateWorkspace: (value: boolean) => void;
   setEditUserName: (uid: string) => void;
   uid: string;
   openModalToCreateWorkspace: () => void;
+  openModalToAddWorkspaceAndUser: () => void;
 };
 
 
@@ -61,7 +61,7 @@ const StyledMenu = styled((props: MenuProps) => (
   },
 }));
 
-export default function CustomizedMenus({ openModalToCreateWorkspace,  setEditUserName, uid}: Props) {
+export default function CustomizedMenus({ openModalToCreateWorkspace,  setEditUserName, uid, openModalToAddWorkspaceAndUser}: Props) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -78,6 +78,13 @@ export default function CustomizedMenus({ openModalToCreateWorkspace,  setEditUs
     openModalToCreateWorkspace();
     handleClose();
   }
+
+  const handleAddWorkspaceAndUser = () =>{
+    openModalToAddWorkspaceAndUser();
+    handleClose();
+  }
+
+
 
   return (
     <div>
@@ -105,22 +112,14 @@ export default function CustomizedMenus({ openModalToCreateWorkspace,  setEditUs
         onClose={handleClose}
       >
         <MenuItem onClick={handleEditUserName} disableRipple>
-          <EditIcon />
-          Edit User Name
+          ユーザー設定
         </MenuItem>
         <MenuItem onClick={handleAddWorkspace} disableRipple>
-          <FileCopyIcon />
-          New Workspace
+          ワークスペースの作成
         </MenuItem>
-        {/* <Divider sx={{ my: 0.5 }} /> */}
-        {/* <MenuItem onClick={handleClose} disableRipple>
-          <ArchiveIcon />
-          Archive
+        <MenuItem onClick={handleAddWorkspaceAndUser} disableRipple>
+          ワークスペースを追加
         </MenuItem>
-        <MenuItem onClick={handleClose} disableRipple>
-          <MoreHorizIcon />
-          More
-        </MenuItem> */}
       </StyledMenu>
     </div>
   );

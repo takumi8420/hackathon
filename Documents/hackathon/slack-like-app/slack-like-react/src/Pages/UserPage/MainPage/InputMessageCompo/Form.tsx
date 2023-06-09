@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import { Send as SendIcon, WidthFull } from '@mui/icons-material';
 import './Form.css';
 import IconButton from '@mui/material/IconButton';
-import ToggleButtonsMultiple from "./compo/inputFormOption"
+import ToggleButtonsMultiple from "./inputFormOption"
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
@@ -13,7 +13,6 @@ type Props = {
    channelId: string;
    userId: string;
 };
-
 
 const Form = (props: Props) => {
   const [messageToSendData, setMessageToSendData] = useState("")

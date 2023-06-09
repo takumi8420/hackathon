@@ -45,7 +45,7 @@ func FindUsersByName(uid string) (*model.UserResForHTTPGet, error) {
 	}
 	defer rows.Close()
 
-	log.Print("rows:", rows)
+	log.Println("rows:", rows)
 
 	var u model.UserResForHTTPGet
 	if rows.Next() {
@@ -54,7 +54,7 @@ func FindUsersByName(uid string) (*model.UserResForHTTPGet, error) {
 		}
 	}
 
-	log.Print("u:", &u)
+	log.Println("u:", &u)
 	return &u, nil
 }
 

@@ -35,7 +35,7 @@ const LoginWithGoogleForm: React.FC = () => {
 
   return (
     <div>
-      <button onClick={signInWithGoogle}>
+      <button style={{height: "30px", width: "200px"}} onClick={signInWithGoogle}>
         Googleでログイン
       </button>
     </div>

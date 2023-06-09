@@ -26,7 +26,7 @@ func SearchUserHandler(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
 	segments := strings.Split(path, "/")
 	uid := segments[len(segments)-1]
-	log.Print(uid)
+	log.Println(uid)
 
 	if uid == "" {
 		log.Println("fail: uid is empty")
@@ -39,7 +39,7 @@ func SearchUserHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	log.Print("ok getuserbyname user", user)
+	log.Println("ok getuserbyname user", user)
 
 	bytes, err := json.Marshal(user)
 	if err != nil {
@@ -47,7 +47,7 @@ func SearchUserHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	log.Print("変換終了 bytes", bytes)
+	log.Println("変換終了 bytes", bytes)
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(bytes)
 }

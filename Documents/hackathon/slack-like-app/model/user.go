@@ -91,6 +91,14 @@ type WorkspaceReqForPost struct {
 	WorkspaceName string `json:"workspace_name"`
 }
 
+type WorkspaceAndUserReqForPost struct {
+	WorkspaceId string `json:"workspace_id"`
+}
+
+type WorkspaceAndUserResForPost struct {
+	WorkspaceId string `json:"workspace_id"`
+}
+
 type ChannelResForPost struct {
 	ChannelId    string    `json:"channel_id"`
 	ChannelName  string    `json:"channel_name"`
@@ -112,6 +120,11 @@ type WorkspaceResForGetByUserId struct {
 	WorkspaceUserName string `json:"workspace_user_name"`
 	WorkspaceId       string `json:"workspace_id"`
 	WorkspaceName     string `json:"workspace_name"`
+}
+
+type AllWorkspaceResForGet struct {
+	WorkspaceId   string `json:"workspace_id"`
+	WorkspaceName string `json:"workspace_name"`
 }
 
 type ChannelReqForGetByWorkspaceId struct {

@@ -74,8 +74,8 @@ func FindChannelByWorkspaceId(WId string) (*[]model.ChannelResForGetByWorkspaceI
 
 	defer rows.Close()
 
-	log.Print("読み取れてはいます")
-	log.Print("rows:", rows)
+	log.Println("読み取れてはいます")
+	log.Println("rows:", rows)
 
 	channels := make([]model.ChannelResForGetByWorkspaceId, 0)
 
@@ -85,7 +85,7 @@ func FindChannelByWorkspaceId(WId string) (*[]model.ChannelResForGetByWorkspaceI
 			log.Printf("fail: rows.Scan, %v\n", err)
 		}
 		channels = append(channels, u)
-		log.Print("u:", channels)
+		log.Println("u:", channels)
 	}
 	if err := rows.Err(); err != nil {
 		log.Printf("fail: rows.Err(), %v\n", err)
@@ -95,6 +95,6 @@ func FindChannelByWorkspaceId(WId string) (*[]model.ChannelResForGetByWorkspaceI
 		log.Printf("fail: rows.Close(), %v\n", err)
 		// エラーハンドリングの処理を追加することが望ましいです
 	}
-	log.Print("channels:", channels)
+	log.Println("channels:", channels)
 	return &channels, nil
 }

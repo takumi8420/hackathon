@@ -93,14 +93,14 @@ func FindChannelWithWorkspaceIdHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	log.Print("channel_id", workspace_id)
+	log.Println("channel_id", workspace_id)
 
 	channels, err := channel_dao.FindChannelByWorkspaceId(workspace_id)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	log.Print("ok getuserbymessages", channels)
+	log.Println("ok getuserbymessages", channels)
 
 	bytes, err := json.Marshal(channels)
 	if err != nil {
@@ -108,8 +108,8 @@ func FindChannelWithWorkspaceIdHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	log.Print("ok bytesofmessages", bytes)
-	log.Print("変換終了 bytes", bytes)
+	log.Println("ok bytesofmessages", bytes)
+	log.Println("変換終了 bytes", bytes)
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(bytes)
 }

@@ -47,8 +47,8 @@ func FindMessagesById(userId string) ([]model.MessagesResForGet, error) {
 
 	defer rows.Close()
 
-	log.Print("読み取れてはいます")
-	log.Print("rows:", rows)
+	log.Println("読み取れてはいます")
+	log.Println("rows:", rows)
 
 	messages := make([]model.MessagesResForGet, 0)
 	var i = -1
@@ -66,7 +66,7 @@ func FindMessagesById(userId string) ([]model.MessagesResForGet, error) {
 		}
 		messages = append(messages, u)
 	}
-	log.Print("u:", messages)
+	log.Println("u:", messages)
 	return messages, nil
 }
 
@@ -79,8 +79,8 @@ func FindMessagesByChannel(channelId string) (*[]model.MessagesResForGet, error)
 
 	defer rows.Close()
 
-	log.Print("読み取れてはいます")
-	log.Print("rows:", rows)
+	log.Println("読み取れてはいます")
+	log.Println("rows:", rows)
 
 	messages := make([]model.MessagesResForGet, 0)
 	var i = -1
@@ -97,7 +97,7 @@ func FindMessagesByChannel(channelId string) (*[]model.MessagesResForGet, error)
 			//}
 		}
 		messages = append(messages, u)
-		log.Print("u:", messages)
+		log.Println("u:", messages)
 	}
 	if err := rows.Err(); err != nil {
 		log.Printf("fail: rows.Err(), %v\n", err)
@@ -107,6 +107,6 @@ func FindMessagesByChannel(channelId string) (*[]model.MessagesResForGet, error)
 		log.Printf("fail: rows.Close(), %v\n", err)
 		// エラーハンドリングの処理を追加することが望ましいです
 	}
-	log.Print("u:", messages)
+	log.Println("u:", messages)
 	return &messages, nil
 }

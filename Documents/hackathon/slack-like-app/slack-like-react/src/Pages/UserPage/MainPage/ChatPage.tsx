@@ -1,23 +1,15 @@
-import React, { Attributes } from "react";
-import './Contents.css';
-import { useState, useEffect, useRef } from "react";
-import Form from "./Form";
+import React from "react";
+import './ChatPage.css';
+import { useState, useEffect } from "react";
+import Form from "./InputMessageCompo/Form";
 import { Button} from "@mui/material";
-import { Height, Margin, MarginOutlined, Send as SendIcon } from '@mui/icons-material';
+import { Send as SendIcon } from '@mui/icons-material';
 import { Delete as DeleteIcon } from '@mui/icons-material';
 import CreateIcon from '@mui/icons-material/Create';
 import Modal from 'react-modal'
 import { TextField } from '@mui/material';
-import { Icon } from '@mui/material';
-import { IconButton } from '@mui/material';
-import BuildIcon from '@mui/icons-material/Build';
 import ReplayIcon from '@mui/icons-material/Replay';
-import SettingsIcon from '@mui/icons-material/Settings';
-import Menu from '@mui/base/Menu';
-import MenuItem from '@mui/base/MenuItem';
-import Setting from "./compo/setting";
-import BasicButtons from "./compo/addChannelIcon";
-import ToggleButtonsMultiple from "./compo/inputFormOption"
+import Setting from "./UserSettingCompo/MenuTab";
 import { useHistory } from 'react-router-dom';
 
 
@@ -36,6 +28,7 @@ const Contents: React.FC = () => {
 
 // workspaceのusestate
   const [workspaceData, setWorkspaceData] = useState<workspaceData[]>([]);
+  const [allWorkspaceData, setAllWorkspaceData] = useState<allWorkspaceData[]>([]);
   const [currentWorkspaceData, setCurrentWorkspaceData] = useState<workspaceData>();
 
   const [selectedMessageId, setSelectedMessageId] = useState("");
@@ -55,6 +48,7 @@ const Contents: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [showModalToCreateChannel, setShowModalToCreateChannel] = useState(false);
   const [showModalToCreateWorkspace, setShowModalToCreateWorkspace] = useState(false);
+  const [showModalToAddWorkspaceAndUser, setShowModalToAddWorkspaceAndUser] = useState(false);
 
 
 
@@ -85,6 +79,17 @@ const Contents: React.FC = () => {
     setShowModalToCreateWorkspace(true);
   };
 
+
+  const closeModalToAddWorkspaceAndUser = () => {
+    setShowModalToAddWorkspaceAndUser(false);
+  };
+
+  const openModalToAddWorkspaceAndUser = () => {
+    setShowModalToAddWorkspaceAndUser(true);
+  };
+
+
+
   const [inputEditValue, setInputEditValue] = useState("");
   const [inputChannelName, setInputChannelName] = useState("");
   const [inputWorkspaceName, setInputWorkspaceName] = useState("");
@@ -103,6 +108,11 @@ const Contents: React.FC = () => {
 
   type workspaceData ={
     workspace_user_name: string;
+    workspace_id: string;
+    workspace_name: string; 
+  }
+
+  type allWorkspaceData ={
     workspace_id: string;
     workspace_name: string; 
   }
@@ -208,6 +218,27 @@ const Contents: React.FC = () => {
           fetchWorkspaceData();
         }
 
+        const onAddWorksapceAndUser = async (workspaceId: string) => {
+          try{
+            const result = await fetch(`https://hackthon1-rzmhhbabrq-uc.a.run.app/register_workspace_and_user/${uid}`,{
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                workspace_id: workspaceId,
+              }),
+            });
+              if (!result.ok) {
+                throw Error(`Failed to create channel: ${result.status}`);
+              }
+            } catch (err) {
+              console.error(err);
+            }
+            fetchWorkspaceData();
+          }
+        
+
     // 編集の送信
     const onEditMessage = async (messageId: string, content: string) => {
       try{
@@ -267,6 +298,21 @@ const Contents: React.FC = () => {
     console.log(currentWorkspaceData);
   };
 
+  // const fetchWorkspaceData = async () => {
+  //   const getResponse = await fetch(`https://hackthon1-rzmhhbabrq-uc.a.run.app/get_workspace_with_user_id/${uid}`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   });
+  //   const data = await getResponse.json();
+  //   console.log("get workspace response is...", data);
+  
+  //   const filteredData = data.filter((item: workspaceData) => !workspaceData.includes(item));
+  //   setAllWorkspaceData(filteredData);
+  //   console.log(allWorkspaceData);
+  // };
+
   const fetchWorkspaceData = async () => {
     const getResponse = await fetch(`https://hackthon1-rzmhhbabrq-uc.a.run.app/get_workspace_with_user_id/${uid}`, {
       method: "GET",
@@ -276,9 +322,28 @@ const Contents: React.FC = () => {
     });
     const data = await getResponse.json();
     console.log("get workspace response is...", data);
-    setWorkspaceData(data);
+  
+    const filteredData = data.filter((item: allWorkspaceData) => !workspaceData.some((w) => w.workspace_id === item.workspace_id));
+    setAllWorkspaceData(filteredData);
+    console.log(allWorkspaceData);
+  };
+  
+
+  const fetchAllWorkspaceData = async () => {
+    const getResponse = await fetch(`https://hackthon1-rzmhhbabrq-uc.a.run.app/get_all_workspace/${uid}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await getResponse.json();
+    console.log("get allworkspace response is...", data);
+    setAllWorkspaceData(data);
     console.log(currentWorkspaceData);
   };
+
+
+
 
 
 
@@ -290,6 +355,8 @@ const Contents: React.FC = () => {
   useEffect(() => {
     initialfetchMessageData();
     console.log("get workspace response is...", currentWorkspaceData?.workspace_id);
+    fetchAllWorkspaceData();
+    console.log("allworlkspace", allWorkspaceData)
   }, [currentChannelData])
 
   useEffect(() => {
@@ -376,16 +443,6 @@ const Contents: React.FC = () => {
     setMessageDatas(messageData);
   }
 
-
-
-  // const chatAreaRef = useRef<HTMLDivElement>(null);
-
-  // useEffect(() => {
-  //   if (chatAreaRef.current) {
-  //     chatAreaRef.current.scrollTo(0, chatAreaRef.current.scrollHeight);
-  //   }
-  // }, [messageDatas]);
-
   const scrollerInner = document.getElementById("scroller_inner");
 
   // scrollerInner?.scrollIntoView(false);
@@ -420,9 +477,9 @@ const Contents: React.FC = () => {
              <div className="MenuIcon">
               <Setting 
                 openModalToCreateWorkspace={openModalToCreateWorkspace}
-                setShowModalToCreateWorkspace={setShowModalToCreateWorkspace}
                 setEditUserName={setEditUserName}
                 uid= {uid}
+                openModalToAddWorkspaceAndUser = {openModalToAddWorkspaceAndUser}
               />
 
               <Modal
@@ -491,6 +548,76 @@ const Contents: React.FC = () => {
                                 </form>
                               </Modal>
 
+
+
+                              <Modal
+                                contentLabel="Example Modal"
+                                isOpen={showModalToAddWorkspaceAndUser}
+                                overlayClassName="modal_overlay"
+                                className="modal_content"
+                                style={{
+                                  overlay: {
+                                    position: 'fixed',
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    backgroundColor: 'rgba(0, 0, 0, 0)' // モーダルの背景色や透明度を指定する場合はここで設定
+                                  },
+                                  content: {
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    transform: 'translate(-50%, -50%)',
+                                    width: '300px', // モーダルの幅を指定
+                                    padding: '20px', // モーダルの内側の余白を指定
+                                    backgroundColor: '#2c303b', // モーダルの背景色を指定
+                                    borderRadius: '4px', // モーダルの角の丸みを指定
+                                    borderColor: 'black'
+                                  } 
+                                }}
+                                >                               
+                                           
+                                <form>
+                                <div style={{ textAlign: 'left', marginBottom: '15px' }}>
+                                  <button onClick={closeModalToAddWorkspaceAndUser}>close</button>
+                                </div>
+                                
+
+                                {allWorkspaceData.map((data: allWorkspaceData) => (
+                                  <div key={data.workspace_id} className="workspace-contents">
+                                        <Button 
+                                        variant="contained" 
+                                        className="workspace_element" 
+                                        style={{ fontSize: '8px', marginTop:'10px' ,marginLeft:'10px'}} 
+                                        onClick={(e) => {
+                                        e.preventDefault();
+                                        onAddWorksapceAndUser(data.workspace_id);
+                                  }}>
+                                      {data.workspace_name}
+                                    </Button>
+                                  </div>
+                                ))}
+
+                                
+                                <div style={{ textAlign: 'center', marginTop: '15px' }}>
+                                    
+                                    <Button 
+                                    type={"submit"} 
+                                    variant="contained" 
+                                    endIcon={<SendIcon />} 
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      onRegisterWorkspace(inputWorkspaceName);
+                                      closeModalToCreateWorkspace();
+                                    }}>
+                                      Register
+                                    </Button>
+                                  </div>
+                                </form>
+                              </Modal>
+
+
             </div>
 
 
@@ -524,7 +651,7 @@ const Contents: React.FC = () => {
              onClick={()=>{
                   openModalToCreateChannel();
              }}>
-                  Add Channel
+                  チャンネル<br/>追加
                   </Button>
             
                   <Modal

@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import React, { useState } from "react";
 import ImageLogo from "./image.svg";
 import "./imageUpload.css"
-import { storage } from "../../../../firebase";
+import { storage } from "../../../../../firebase";
 import { ref, uploadBytesResumable } from "firebase/storage"
 import { getDownloadURL } from "firebase/storage";
 import { useHistory } from 'react-router-dom';
