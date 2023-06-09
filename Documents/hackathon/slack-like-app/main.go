@@ -19,6 +19,7 @@ func main() {
 
 	http.HandleFunc("/search_user/", user_controller.SearchUserHandler)
 	http.HandleFunc("/register_user/", user_controller.RegisterUserHandler)
+	http.HandleFunc("/register_userPhotoURL/", user_controller.Register_userPhotoURL)
 	http.HandleFunc("/get_messages_with_user_id/", messages_controller.FindMessagesWithUserIdHandler)
 	http.HandleFunc("/get_messages_with_channel_id/", messages_controller.FindMessagesWithChannelIdHandler)
 	http.HandleFunc("/send_messages/", messages_controller.SendMessagesHandler)

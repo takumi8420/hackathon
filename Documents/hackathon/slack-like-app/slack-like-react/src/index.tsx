@@ -11,6 +11,8 @@ import IsThereAccount from './components/AccessToDatabase/IsThereAccount';
 import RegisterAccount from './components/AccessToDatabase/RegisterAccount';
 import Contents from './components/UserPage/Contents';
 import Rename from './components/RenamePage';
+import UploadPage from './components/UserPage/compo/UpLoadPhoto/UploadPage'
+
 
 
 
@@ -28,6 +30,9 @@ ReactDOM.render(
         <Route path="/RegisterAccount" component={RegisterAccount} />
         <Route path="/UserPage" component={Contents} />
         <Route path="/EditUserName" component={Rename} />
+        <Route path="/UploadPage" component={UploadPage} />
+        
+    
 
         
 

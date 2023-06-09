@@ -40,7 +40,7 @@ func CloseDB() error {
 
 func FindMessagesById(userId string) ([]model.MessagesResForGet, error) {
 
-	rows, err := db.Query("SELECT user.user_name, message.message_id, message.channel_id, message.user_id, message.contents, message.created_at, message.is_edited FROM messages LEFT JOIN user ON message.user_id = user.user_id WHERE message.user_id = ?", userId)
+	rows, err := db.Query("SELECT user.user_name, message.message_id, message.channel_id, message.user_id, message.contents, message.created_at, message.is_edited, user.photo_url FROM messages LEFT JOIN user ON message.user_id = user.user_id WHERE message.user_id = ?", userId)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func FindMessagesById(userId string) ([]model.MessagesResForGet, error) {
 	for rows.Next() {
 		i += 1
 		var u model.MessagesResForGet
-		if err := rows.Scan(&u.UserName, &u.MessageId, &u.ChannelId, &u.UserId, &u.Contents, &u.CreatedAt, &u.IsEdited); err != nil {
+		if err := rows.Scan(&u.UserName, &u.MessageId, &u.ChannelId, &u.UserId, &u.Contents, &u.CreatedAt, &u.IsEdited, &u.UserPhotoURL); err != nil {
 			log.Printf("fail: rows.Scan, %v\n", err)
 
 			if err := rows.Close(); err != nil { // 500を返して終了するが、その前にrowsのClose処理が必要
@@ -72,7 +72,7 @@ func FindMessagesById(userId string) ([]model.MessagesResForGet, error) {
 
 func FindMessagesByChannel(channelId string) (*[]model.MessagesResForGet, error) {
 
-	rows, err := db.Query("SELECT user.user_name, message.message_id, message.channel_id, message.user_id, message.content, message.created_at, message.is_edited FROM message LEFT JOIN user ON message.user_id = user.user_id WHERE message.channel_id = ?", channelId)
+	rows, err := db.Query("SELECT user.user_name, message.message_id, message.channel_id, message.user_id, message.content, message.created_at, message.is_edited, user.photo_url FROM message LEFT JOIN user ON message.user_id = user.user_id WHERE message.channel_id = ?", channelId)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +87,7 @@ func FindMessagesByChannel(channelId string) (*[]model.MessagesResForGet, error)
 	for rows.Next() {
 		i += 1
 		var u model.MessagesResForGet
-		if err := rows.Scan(&u.UserName, &u.MessageId, &u.ChannelId, &u.UserId, &u.Contents, &u.CreatedAt, &u.IsEdited); err != nil {
+		if err := rows.Scan(&u.UserName, &u.MessageId, &u.ChannelId, &u.UserId, &u.Contents, &u.CreatedAt, &u.IsEdited, &u.UserPhotoURL); err != nil {
 			log.Printf("fail: rows.Scan, %v\n", err)
 
 			//if err := rows.Close(); err != nil { // 500を返して終了するが、その前にrowsのClose処理が必要

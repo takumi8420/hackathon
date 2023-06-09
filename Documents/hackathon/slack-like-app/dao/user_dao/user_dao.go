@@ -65,6 +65,7 @@ func CreateUser(user model.UserReqForHTTPPost, uid string) (model.UserResForHTTP
 	log.Println("uid:", uid)
 	log.Println("id:", id)
 	log.Println(user.Name, user.Age)
+	img_url := "https://firebasestorage.googleapis.com/v0/b/term3-takumi-kon.appspot.com/o/image%2F%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202023-06-09%2020.41.05.png?alt=media&token=0bd9e171-da57-4c8f-9b57-ee53c6411f5d"
 
 	tx, err := db.Begin()
 	if err != nil {
@@ -72,7 +73,7 @@ func CreateUser(user model.UserReqForHTTPPost, uid string) (model.UserResForHTTP
 	}
 	defer tx.Rollback()
 
-	_, err = tx.Exec("INSERT INTO user (user_id, user_name, age, registered_at, photo_url) VALUES (?, ?, ?, ?, ?)", id, user.Name, user.Age, t, "")
+	_, err = tx.Exec("INSERT INTO user (user_id, user_name, age, registered_at, photo_url) VALUES (?, ?, ?, ?, ?)", id, user.Name, user.Age, t, img_url)
 	if err != nil {
 		return model.UserResForHTTPPost{}, err
 	}
@@ -101,7 +102,7 @@ func RegisterUserAndChannel(req model.UserAndChannelReqForPost, uid string) (mod
 	t := time.Now()
 	entropy := ulid.Monotonic(rand.New(rand.NewSource(t.UnixNano())), 0)
 	id := ulid.MustNew(ulid.Timestamp(t), entropy).String()
-	log.Println("uid:", uid)
+	log.Println("urlは:", uid)
 	log.Println("id:", id)
 
 	tx, err := db.Begin()
@@ -151,4 +152,27 @@ func RegisterUserAndWorkspace(req model.UserAndWorkplaceReqForPost, uid string) 
 	}
 
 	return model.UserAndWorkspaceResForPost{WorkspaceMemberId: id, WorkspaceId: req.WorkspaceId, UserId: uid, WorkspaceUserName: req.Name}, nil
+}
+
+func RegisterPhotoURL(user model.UserPhotoReqForHTTPPost, uid string) (model.UserPhotoResForHTTPPost, error) {
+
+	log.Println(user.UserPhotoURL)
+	tx, err := db.Begin()
+	if err != nil {
+		return model.UserPhotoResForHTTPPost{}, err
+	}
+	defer tx.Rollback()
+
+	_, err = tx.Exec("UPDATE user SET photo_url = ? WHERE user_id = ?", user.UserPhotoURL, user.Id)
+
+	if err != nil {
+		return model.UserPhotoResForHTTPPost{}, err
+	}
+	log.Println("ok user table")
+
+	if err := tx.Commit(); err != nil {
+		return model.UserPhotoResForHTTPPost{}, err
+	}
+
+	return model.UserPhotoResForHTTPPost{Id: uid, UserPhotoURL: user.UserPhotoURL}, nil
 }

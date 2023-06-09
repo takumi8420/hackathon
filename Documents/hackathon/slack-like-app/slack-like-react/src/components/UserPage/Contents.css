@@ -83,26 +83,9 @@
   font-size: smaller;
 }
 
-.chat_element{
-  padding-top: 5px;
-  margin-top: 5px;
-  padding-bottom: 5px;
-  margin-bottom: 5px;
-  position: relative;
-  /* position: absolute; */
-}
 
-.menu {
-  position: absolute;
-  right: 0;
-  top: 0;
-  display: none;
-}
 
-.chat_element:hover .menu {
-  display: flex; /* カーソルが当たった時に表示 */
-  flex-direction: row;
-}
+
 
 .edition {
   display: flex;
@@ -176,3 +159,49 @@
   text-align: center;
 }
 
+.chat_message{
+  padding-left: 70px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.chat_element_username{
+  /* border: 2px solid black; */
+  margin-left: 0px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.chat_element_img{
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  border: 2px solid black;
+  margin-top: 10px;
+  margin-left: 0px;
+  /* padding-right: 10px; */
+}
+
+.chat_element:hover .menu {
+  display: flex; 
+  flex-direction: row;
+  z-index: 3;
+}
+
+.menu {
+  position: absolute;
+  right: 30px;
+  right: 0;
+  top: 0;
+  display: none;
+  
+}
+
+
+
+
+.chat_element{
+  /* border: 2px solid black; */
+}
